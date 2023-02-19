@@ -22,7 +22,7 @@ type model struct {
 		session int
 		workDuration int
 		breakDuration int
-		onBreak int
+		onBreak bool
 	}
 	state int
 	cursor int
