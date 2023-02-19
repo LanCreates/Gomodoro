@@ -33,7 +33,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if m.state != MAIN_MENU {
 					m.state = MAIN_MENU
 				}
-			case "up", "down", "left", "right":
+			case "h", "j", "k", "l", "up", "down", "left", "right":
 				dir := msg.(tea.KeyMsg).String()
 				if m.state != MAIN_MENU {
 					m.navigateMenu(dir)
@@ -62,11 +62,5 @@ func (m *model) navigateMenu(dir string) {
 }
 
 func (m *model) selectMenu() {
-	switch m.cursor {
-	case SET_DUR_WORK:
-	case SET_DUR_BREAK:
-	case SET_SESSION:
-	case TIMER:
-	case EXIT:
-	}
+	m.state = m.cursor
 }
