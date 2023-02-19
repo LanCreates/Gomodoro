@@ -19,7 +19,7 @@ func main() {
 				workDuration: 15,
 				breakDuration: 5,
 			}, 
-			tracker: struct {
+			status: struct {
 				onBreak bool
 				onPause bool
 			}{
@@ -27,11 +27,9 @@ func main() {
 				onPause: false,
 			},
 			state: MAIN_MENU, 
-			cursor: 0, 
 			submenu: []submenu{ 
 				{ 
 					name: "Start",
-					cursor: 0,
 					opts: []opt {
 						{text: "Pause"},
 						{text: "End Now"},
@@ -39,7 +37,6 @@ func main() {
 				},
 				{
 					name: "Set work duration",
-					cursor: 0, 
 					opts: []opt {
 						{text: "15"},
 						{text: "30"},
@@ -49,7 +46,6 @@ func main() {
 				},
 				{
 					name: "Set break duration",
-					cursor: 0, 
 					opts: []opt {
 						{text: "5"},
 						{text: "10"},
@@ -58,7 +54,6 @@ func main() {
 					},
 				{
 					name: "Set session",
-					cursor: 0, 
 					opts: []opt {
 						{text: "2"},
 						{text: "3"},
@@ -69,7 +64,6 @@ func main() {
 					},
 				{
 					name: "Exit",
-					cursor: 0, 
 					opts: []opt{},
 				},
 			},

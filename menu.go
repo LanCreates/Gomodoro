@@ -23,7 +23,7 @@ type model struct {
 		workDuration int
 		breakDuration int
 	}
-	tracker struct {
+	status struct {
 		onBreak bool
 		onPause bool
 	}

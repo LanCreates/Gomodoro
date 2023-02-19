@@ -22,14 +22,14 @@ func (m model) viewBegin() string {
 
 	for k, v := range([]string{"", "That's a Wrap..."}) {
 		if k == 0 {
-			if m.tracker.onPause {
+			if m.status.onPause {
 				v = "Let's Continue!  "
 			} else {
 				v = "Hold on a second!"
 			}
 		}
 
-		if(k == m.cursor) {
+		if(k == m.submenu[m.cursor].cursor) {
 			out += fmt.Sprintf(" > %s", v)
 		} else {
 			out += fmt.Sprintf("   %s", v)
