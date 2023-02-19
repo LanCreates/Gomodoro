@@ -10,6 +10,7 @@ const (
 	SET_DUR_WORK
 	SET_SESSION
 	TIMER
+	EXIT
 	N_MENU
 )
 
@@ -29,8 +30,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.(tea.KeyMsg).String() {
 			case "esc":
-				return m, tea.Quit
+				if m.state != MAIN_MENU {
+					m.state = MAIN_MENU
+				}
 			case "up", "down", "left", "right":
+				dir := msg.(tea.KeyMsg).String()
+				if m.state != MAIN_MENU {
+					m.navigateMenu(dir)
+				} else {
+					m.navigateSubmenu(dir)
+				}
 		}
 	case tickMsg:
 		
@@ -52,3 +61,12 @@ func (m *model) navigateMenu(dir string) {
 	m.cursor = (m.cursor + N_MENU) % N_MENU
 }
 
+func (m *model) selectMenu() {
+	switch m.cursor {
+	case SET_DUR_WORK:
+	case SET_DUR_BREAK:
+	case SET_SESSION:
+	case TIMER:
+	case EXIT:
+	}
+}

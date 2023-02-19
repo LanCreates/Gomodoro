@@ -12,22 +12,28 @@ func main() {
 			state: MAIN_MENU, 
 			cursor: 0, 
 			submenu: []submenu{ 
-				{cursor: 0, // SET WORK DURATION
-				opts: []opt {
-					{text: "15 min"},
-					{text: "30 min"},
-					{text: "45 min"},
-					{text: "60 min"},
+				{
+					name: "Set work duration",
+					cursor: 0, // SET WORK DURATION
+					opts: []opt {
+						{text: "15"},
+						{text: "30"},
+						{text: "45"},
+						{text: "60"},
 					},
 				},
-				{cursor: 0, // SET BREAK DURATION
+				{
+				name: "Set break duration",
+				cursor: 0, // SET BREAK DURATION
 				opts: []opt {
-					{text: "5 min"},
-					{text: "10 min"},
-					{text: "15 min"},
+					{text: "5"},
+					{text: "10"},
+					{text: "15"},
 					},
 				},
-				{cursor: 0, // SET SESSION
+				{
+				name: "Set session",
+				cursor: 0, // SET SESSION
 				opts: []opt {
 					{text: "2"},
 					{text: "3"},

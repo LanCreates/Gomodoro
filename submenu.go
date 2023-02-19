@@ -5,6 +5,7 @@ type opt struct {
 }
 
 type submenu struct {
+	name string
 	cursor int
 	opts []opt
 }
