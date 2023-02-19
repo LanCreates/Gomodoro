@@ -13,13 +13,8 @@ const (
 	N_MENU
 )
 
-type timer struct {
-	begin int64
-}
-
-
 type model struct {
-	tracker timer
+	tracker struct{begin int64}
 	state int
 	cursor int
 	submenu []submenu
@@ -48,3 +43,12 @@ func (m model) View() string {
 	out := ""
 	return out
 }
+
+func (m *model) navigateMenu(dir string) {
+	switch dir {
+	case "up", "right": m.cursor++
+	case "down", "left": m.cursor--
+	}
+	m.cursor = (m.cursor + N_MENU) % N_MENU
+}
+

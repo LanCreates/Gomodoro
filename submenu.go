@@ -11,14 +11,6 @@ type submenu struct {
 
 type tickMsg struct{}
 
-func (m *model) navigateMenu(dir string) {
-	switch dir {
-	case "up", "right": m.cursor++
-	case "down", "left": m.cursor--
-	}
-	m.cursor = (m.cursor + N_MENU) % N_MENU
-}
-
 func (m *model) navigateSubmenu(dir string) {
 	switch dir {
 	case "up", "right":

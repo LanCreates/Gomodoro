@@ -8,7 +8,7 @@ import (
 func main() {
 	p := tea.NewProgram(
 		model{ 
-			tracker: timer{}, 
+			tracker: struct{begin int64}{begin: 0}, 
 			state: MAIN_MENU, 
 			cursor: 0, 
 			submenu: []submenu{ 
