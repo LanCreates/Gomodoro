@@ -1,15 +1,16 @@
 package main
 
 import (
+	"strings"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 const (
 	MAIN_MENU int = iota
-	SET_DUR_BREAK
 	SET_DUR_WORK
+	SET_DUR_BREAK
 	SET_SESSION
-	TIMER
+	BEGIN
 	EXIT
 	N_MENU
 )
@@ -29,6 +30,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg.(type) {
 	case tea.KeyMsg:
 		switch msg.(tea.KeyMsg).String() {
+			case "enter":
+				if m.state != MAIN_MENU {
+					m.selectMenu()
+				} else {
+					m.selectSubMenu()
+				}
 			case "esc":
 				if m.state != MAIN_MENU {
 					m.state = MAIN_MENU
@@ -49,8 +56,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string { 
-	out := ""
-	return out
+	out := []string{ //╮╯─╰│╭╮
+		"╭───────────────── Go-modoro ─────────────────╮",
+	}
+
+	switch m.state {
+		case MAIN_MENU:
+			out = append(out, viewMainMenu())
+		case SET_DUR_WORK:
+			out = append(out, viewSetDurWork())
+		case SET_DUR_BREAK:
+			out = append(out, viewSetDurBreak())
+		case SET_SESSION:
+			out = append(out, viewSetSession())
+		case BEGIN:
+			out = append(out, viewBegin())
+	}
+	out = append(out, "============================================")
+	return strings.Join(out, "\n")
 }
 
 func (m *model) navigateMenu(dir string) {

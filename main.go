@@ -12,6 +12,14 @@ func main() {
 			state: MAIN_MENU, 
 			cursor: 0, 
 			submenu: []submenu{ 
+				{ 
+					name: "Start",
+					cursor: 0,
+					opts: []opt {
+						{text: "Pause"},
+						{text: "End Now"},
+					},
+				},
 				{
 					name: "Set work duration",
 					cursor: 0, // SET WORK DURATION

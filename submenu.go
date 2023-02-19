@@ -22,3 +22,12 @@ func (m *model) navigateSubmenu(dir string) {
 	m.submenu[m.cursor].cursor = (m.submenu[m.cursor].cursor + N_MENU) % N_MENU
 }
 
+func (m model) selectSubmenu() {
+	switch m.state {
+		case MAIN_MENU:
+		case SET_DUR_WORK:
+		case SET_DUR_BREAK:
+		case SET_SESSION:
+		case BEGIN:
+	}
+}
