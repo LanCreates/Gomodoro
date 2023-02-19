@@ -86,17 +86,24 @@ func (m model) View() string {
     0      0 0      0    0      0 0      0
 	 000000   000000      000000   000000 
 	*/
+
+	// Show config
+	if m.state == MAIN_MENU {
+		out = append(out, showConfig(m))
+		out = append(out, "───────────────────────────────────────────────")
+	}
+
 	switch m.state {
 		case MAIN_MENU:
-			out = append(out, m.viewMainMenu())
+			out = append(out, viewMainMenu(m))
 		case SET_DUR_WORK:
-			out = append(out, viewSetDurWork())
+			out = append(out, viewSetDurWork(m))
 		case SET_DUR_BREAK:
-			out = append(out, viewSetDurBreak())
+			out = append(out, viewSetDurBreak(m))
 		case SET_SESSION:
-			out = append(out, viewSetSession())
+			out = append(out, viewSetSession(m))
 		case BEGIN:
-			out = append(out, m.viewBegin())
+			out = append(out, viewBegin(m))
 	}
 	out = append(out, "╰─────────────────────────────────────────────╯")
 	return strings.Join(out, "\n")

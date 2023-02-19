@@ -5,7 +5,14 @@ import (
 	"strings"
 )
 
-func (m model) viewMainMenu() string {
+func showConfig(m model) string {
+	config := fmt.Sprintf(
+		"Sessions: %d\nWork/Break time: %d/%d mins",
+		m.config.session, m.config.workDuration, m.config.breakDuration,
+	)
+	return config
+}
+func viewMainMenu(m model) string {
 	var out []string
 	for k, v := range(m.submenu) {
 		if k == m.cursor {
@@ -17,7 +24,7 @@ func (m model) viewMainMenu() string {
 	return strings.Join(out, "\n")
 }
 
-func (m model) viewBegin() string {
+func viewBegin(m model) string {
 	out := ""
 
 	for k, v := range([]string{"", "That's a Wrap..."}) {
@@ -40,17 +47,41 @@ func (m model) viewBegin() string {
 	return out
 }
 
-func viewSetDurWork() string {
-	out := "Set Work"
+func viewSetDurWork(m model) string {
+	out := "How long do you want to work? (in minutes)\n"
+	for k, v := range(m.submenu[m.cursor].opts) {
+		if k == m.submenu[m.cursor].cursor {
+			out += fmt.Sprintf(" > %s", v.text)
+		} else {
+			out += fmt.Sprintf("   %s", v.text)
+		}
+		out += "   "
+	}
 	return out
 }
 
-func viewSetDurBreak() string {
-	out := "Set Break"
+func viewSetDurBreak(m model) string {
+	out := "How long do you want to break? (in minutes)\n"
+	for k, v := range(m.submenu[m.cursor].opts) {
+		if k == m.submenu[m.cursor].cursor {
+			out += fmt.Sprintf(" > %s", v.text)
+		} else {
+			out += fmt.Sprintf("   %s", v.text)
+		}
+		out += "   "
+	}
 	return out
 }
 
-func viewSetSession() string {
-	out := "Set Session"
+func viewSetSession(m model) string {
+	out := "How many rounds do you want? (in minutes)\n"
+	for k, v := range(m.submenu[m.cursor].opts) {
+		if k == m.submenu[m.cursor].cursor {
+			out += fmt.Sprintf(" > %s", v.text)
+		} else {
+			out += fmt.Sprintf("   %s", v.text)
+		}
+		out += "   "
+	}
 	return out
 }

@@ -32,9 +32,17 @@ func (m *model) selectSubmenu() {
 		case 1: m.state = MAIN_MENU
 		}
 	case SET_DUR_WORK:
-		switch selected {
-		}
+		m.config.workDuration = (selected + 1)*15
+		m.state = MAIN_MENU
 	case SET_DUR_BREAK:
+		m.config.breakDuration = (selected + 1)*5
+		m.state = MAIN_MENU
 	case SET_SESSION:
+		if selected == 3 {
+			m.config.session = 6969
+		} else {
+			m.config.session = selected + 2
+		}
+		m.state = MAIN_MENU
 	}
 }
