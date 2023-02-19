@@ -5,17 +5,14 @@ import (
 )
 
 func (m *model) handleStart() {
-
 }
 
 func (m *model) handleSetDurWork(choice string) {
-	duration, _ := strconv.Atoi(choice)
-	m.tracker.begin += int64(duration)
+	m.tracker.workDuration, _ = strconv.Atoi(choice)
 }
 
 func (m *model) handleSetDurBreak(choice string) {
-	duration, _ := strconv.Atoi(choice)
-	m.tracker.begin += int64(duration)
+	m.tracker.breakDuration, _ = strconv.Atoi(choice)
 }
 
 func (m *model) handleSetSession(choice string) {

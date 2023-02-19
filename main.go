@@ -8,7 +8,18 @@ import (
 func main() {
 	p := tea.NewProgram(
 		model{ 
-			tracker: struct{begin int64}{begin: 0}, 
+			tracker: struct{
+				end int64
+				session int
+				workDuration int
+				breakDuration int
+				onBreak bool
+			}{
+				end: 0,
+				session: 1,
+				workDuration: 15,
+				breakDuration: 5,
+			}, 
 			state: MAIN_MENU, 
 			cursor: 0, 
 			submenu: []submenu{ 

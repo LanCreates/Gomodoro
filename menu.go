@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+	"time"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -16,7 +17,13 @@ const (
 )
 
 type model struct {
-	tracker struct{begin int64}
+	tracker struct{
+		end int64
+		session int
+		workDuration int
+		breakDuration int
+		onBreak int
+	}
 	state int
 	cursor int
 	submenu []submenu
@@ -31,10 +38,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.(tea.KeyMsg).String() {
 			case "enter":
-				if m.state != MAIN_MENU {
+				if m.state == MAIN_MENU {
 					m.selectMenu()
 				} else {
-					m.selectSubMenu()
+					m.selectSubmenu()
 				}
 			case "esc":
 				if m.state != MAIN_MENU {
@@ -86,4 +93,7 @@ func (m *model) navigateMenu(dir string) {
 
 func (m *model) selectMenu() {
 	m.state = m.cursor
+	if m.state == BEGIN {
+		m.tracker.end = time.Now().UnixMilli() + int64(m.tracker.workDuration * 1000)
+	}
 }

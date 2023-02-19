@@ -1,26 +1,26 @@
 package main
 
 func viewMainMenu() string {
-	out := ""
+	out := "Main Menu"
 	return out
 }
 
 func viewBegin() string {
-	out := ""
+	out := "Begin..."
 	return out
 }
 
 func viewSetDurWork() string {
-	out := ""
+	out := "Set Work"
 	return out
 }
 
 func viewSetDurBreak() string {
-	out := ""
+	out := "Set Break"
 	return out
 }
 
 func viewSetSession() string {
-	out := ""
+	out := "Set Session"
 	return out
 }
