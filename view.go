@@ -37,9 +37,9 @@ func viewBegin(m model) string {
 		}
 
 		if(k == m.submenu[m.cursor].cursor) {
-			out += fmt.Sprintf(" > %s", v)
+			out += fmt.Sprintf("%s %s", activeSelection(), v)
 		} else {
-			out += fmt.Sprintf("   %s", v)
+			out += fmt.Sprintf("%s %s", nonactiveSelection(), v)
 		}
 
 		out += "    "
@@ -51,9 +51,9 @@ func viewSetDurWork(m model) string {
 	out := "How long do you want to work? (in minutes)\n"
 	for k, v := range(m.submenu[m.cursor].opts) {
 		if k == m.submenu[m.cursor].cursor {
-			out += fmt.Sprintf(" > %s", v.text)
+			out += fmt.Sprintf("%s %s", activeSelection(), v.text)
 		} else {
-			out += fmt.Sprintf("   %s", v.text)
+			out += fmt.Sprintf("%s %s", nonactiveSelection(), v.text)
 		}
 		out += "   "
 	}
@@ -64,9 +64,9 @@ func viewSetDurBreak(m model) string {
 	out := "How long do you want to break? (in minutes)\n"
 	for k, v := range(m.submenu[m.cursor].opts) {
 		if k == m.submenu[m.cursor].cursor {
-			out += fmt.Sprintf(" > %s", v.text)
+			out += fmt.Sprintf("%s %s", activeSelection(), v.text)
 		} else {
-			out += fmt.Sprintf("   %s", v.text)
+			out += fmt.Sprintf("%s %s", nonactiveSelection(), v.text)
 		}
 		out += "   "
 	}
@@ -77,9 +77,9 @@ func viewSetSession(m model) string {
 	out := "How many rounds do you want? (in minutes)\n"
 	for k, v := range(m.submenu[m.cursor].opts) {
 		if k == m.submenu[m.cursor].cursor {
-			out += fmt.Sprintf(" > %s", v.text)
+			out += fmt.Sprintf("%s %s", activeSelection(), v.text)
 		} else {
-			out += fmt.Sprintf("   %s", v.text)
+			out += fmt.Sprintf("%s %s", nonactiveSelection(), v.text)
 		}
 		out += "   "
 	}
