@@ -1,12 +1,42 @@
 package main
 
-func viewMainMenu() string {
-	out := "Main Menu"
-	return out
+import (
+	"fmt"
+	"strings"
+)
+
+func (m model) viewMainMenu() string {
+	var out []string
+	for k, v := range(m.submenu) {
+		if k == m.cursor {
+			out = append(out, fmt.Sprintf(" >  %s", v.name))
+		} else {
+			out = append(out, fmt.Sprintf("   %s", v.name))
+		}
+	}
+	return strings.Join(out, "\n")
 }
 
-func viewBegin() string {
-	out := "Begin..."
+func (m model) viewBegin() string {
+	out := ""
+
+	for k, v := range([]string{"", "That's a Wrap..."}) {
+		if k == 0 {
+			if m.tracker.onPause {
+				v = "Let's Continue!  "
+			} else {
+				v = "Hold on a second!"
+			}
+		}
+
+		if(k == m.cursor) {
+			out += fmt.Sprintf(" > %s", v)
+		} else {
+			out += fmt.Sprintf("   %s", v)
+		}
+
+		out += "    "
+	}
 	return out
 }
 

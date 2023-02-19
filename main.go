@@ -8,18 +8,24 @@ import (
 func main() {
 	p := tea.NewProgram(
 		model{ 
-			tracker: struct{
+			config: struct{
 				end int64
 				session int
 				workDuration int
 				breakDuration int
-				onBreak bool
 			}{
 				end: 0,
 				session: 1,
 				workDuration: 15,
 				breakDuration: 5,
 			}, 
+			tracker: struct {
+				onBreak bool
+				onPause bool
+			}{
+				onBreak: false,
+				onPause: false,
+			},
 			state: MAIN_MENU, 
 			cursor: 0, 
 			submenu: []submenu{ 
@@ -33,7 +39,7 @@ func main() {
 				},
 				{
 					name: "Set work duration",
-					cursor: 0, // SET WORK DURATION
+					cursor: 0, 
 					opts: []opt {
 						{text: "15"},
 						{text: "30"},
@@ -42,24 +48,29 @@ func main() {
 					},
 				},
 				{
-				name: "Set break duration",
-				cursor: 0, // SET BREAK DURATION
-				opts: []opt {
-					{text: "5"},
-					{text: "10"},
-					{text: "15"},
+					name: "Set break duration",
+					cursor: 0, 
+					opts: []opt {
+						{text: "5"},
+						{text: "10"},
+						{text: "15"},
+						},
 					},
-				},
 				{
-				name: "Set session",
-				cursor: 0, // SET SESSION
-				opts: []opt {
-					{text: "2"},
-					{text: "3"},
-					{text: "4"},
-					{text: "5"},
-					{text: "until tired"},
+					name: "Set session",
+					cursor: 0, 
+					opts: []opt {
+						{text: "2"},
+						{text: "3"},
+						{text: "4"},
+						{text: "5"},
+						{text: "until tired"},
+						},
 					},
+				{
+					name: "Exit",
+					cursor: 0, 
+					opts: []opt{},
 				},
 			},
 		},

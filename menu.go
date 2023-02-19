@@ -7,22 +7,25 @@ import (
 )
 
 const (
-	MAIN_MENU int = iota
-	SET_DUR_WORK
+	BEGIN int = iota
+	SET_DUR_WORK 
 	SET_DUR_BREAK
 	SET_SESSION
-	BEGIN
 	EXIT
 	N_MENU
+	MAIN_MENU
 )
 
 type model struct {
-	tracker struct{
+	config struct{
 		end int64
 		session int
 		workDuration int
 		breakDuration int
+	}
+	tracker struct {
 		onBreak bool
+		onPause bool
 	}
 	state int
 	cursor int
@@ -37,28 +40,33 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg.(type) {
 	case tea.KeyMsg:
 		switch msg.(tea.KeyMsg).String() {
-			case "enter":
-				if m.state == MAIN_MENU {
-					m.selectMenu()
-				} else {
-					m.selectSubmenu()
-				}
-			case "esc":
-				if m.state != MAIN_MENU {
-					m.state = MAIN_MENU
-				}
-			case "h", "j", "k", "l", "up", "down", "left", "right":
-				dir := msg.(tea.KeyMsg).String()
-				if m.state != MAIN_MENU {
-					m.navigateMenu(dir)
-				} else {
-					m.navigateSubmenu(dir)
-				}
+		case "enter":
+			if m.state == MAIN_MENU {
+				m.selectMenu()
+			} else {
+				m.selectSubmenu()
+			}
+		case "esc":
+			if m.state != MAIN_MENU {
+				m.state = MAIN_MENU
+			}
+		case "h", "j", "k", "l", "up", "down", "left", "right":
+			dir := msg.(tea.KeyMsg).String()
+			if m.state == MAIN_MENU {
+				m.navigateMenu(dir)
+			} else {
+				m.navigateSubmenu(dir)
+			}
+		case "X":
+			return m, tea.Quit
 		}
 	case tickMsg:
 		
 	}
 
+	if m.state == EXIT {
+		return m, tea.Quit
+	}
 	return m, nil
 }
 
@@ -67,9 +75,20 @@ func (m model) View() string {
 		"╭───────────────── Go-modoro ─────────────────╮",
 	}
 
+	/*
+	 000000   000000      000000   000000 
+	0      0 0      0    0      0 0      0
+	0      0 0      0    0      0 0      0
+	0      0 0      0    0      0 0      0
+	 000000   000000  00  000000   000000 
+	0      0 0      0    0      0 0      0
+	0      0 0      0    0      0 0      0
+    0      0 0      0    0      0 0      0
+	 000000   000000      000000   000000 
+	*/
 	switch m.state {
 		case MAIN_MENU:
-			out = append(out, viewMainMenu())
+			out = append(out, m.viewMainMenu())
 		case SET_DUR_WORK:
 			out = append(out, viewSetDurWork())
 		case SET_DUR_BREAK:
@@ -77,16 +96,16 @@ func (m model) View() string {
 		case SET_SESSION:
 			out = append(out, viewSetSession())
 		case BEGIN:
-			out = append(out, viewBegin())
+			out = append(out, m.viewBegin())
 	}
-	out = append(out, "============================================")
+	out = append(out, "╰─────────────────────────────────────────────╯")
 	return strings.Join(out, "\n")
 }
 
 func (m *model) navigateMenu(dir string) {
 	switch dir {
-	case "up", "right": m.cursor++
-	case "down", "left": m.cursor--
+	case "up", "right", "k", "l": m.cursor--
+	case "down", "left", "h", "j": m.cursor++
 	}
 	m.cursor = (m.cursor + N_MENU) % N_MENU
 }
@@ -94,6 +113,6 @@ func (m *model) navigateMenu(dir string) {
 func (m *model) selectMenu() {
 	m.state = m.cursor
 	if m.state == BEGIN {
-		m.tracker.end = time.Now().UnixMilli() + int64(m.tracker.workDuration * 1000)
+		m.config.end = time.Now().UnixMilli() + int64(m.config.workDuration * 1000)
 	}
 }
