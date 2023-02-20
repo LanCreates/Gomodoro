@@ -2,8 +2,12 @@ package main
 
 import (
 	"fmt"
+	"time"
+	"strconv"
 	"strings"
 )
+
+var segmentDisplay = [4][7]bool{}
 
 func getDigits(n int) int {
 	digs := 0
@@ -11,11 +15,73 @@ func getDigits(n int) int {
 	return digs
 }
 
+func msToSecond(ms int64) int64 {
+	return ms/1000
+}
+
+func updateSegmentDisplay(timeLeft string) {
+	for ix, v := range(timeLeft) {
+		for jx := 0; jx < 7; jx++ {
+			segmentDisplay[ix][jx] = false
+		}
+		switch v {
+		case 1:
+			segmentDisplay[ix][2] = true
+			segmentDisplay[ix][5] = true
+		case 2:
+			segmentDisplay[ix][0] = true
+			segmentDisplay[ix][2] = true
+			segmentDisplay[ix][3] = true
+			segmentDisplay[ix][4] = true
+			segmentDisplay[ix][6] = true
+		case 3:
+			segmentDisplay[ix][0] = true
+			segmentDisplay[ix][2] = true
+			segmentDisplay[ix][3] = true
+			segmentDisplay[ix][5] = true
+			segmentDisplay[ix][6] = true
+		case 4:
+			segmentDisplay[ix][1] = true
+			segmentDisplay[ix][2] = true
+			segmentDisplay[ix][3] = true
+			segmentDisplay[ix][5] = true
+		case 5:
+			segmentDisplay[ix][0] = true
+			segmentDisplay[ix][1] = true
+			segmentDisplay[ix][3] = true
+			segmentDisplay[ix][5] = true
+			segmentDisplay[ix][6] = true
+		case 6:
+			for jx := 0; jx < 8; jx++ {
+				segmentDisplay[ix][jx] = true
+			}
+			segmentDisplay[ix][2] = true
+		case 7:
+			segmentDisplay[ix][0] = true
+			segmentDisplay[ix][2] = true
+			segmentDisplay[ix][5] = true
+		case 8:
+			for jx := 0; jx < 8; jx++ {
+				segmentDisplay[ix][jx] = true
+			}
+		case 9:
+			for jx := 0; jx < 8; jx++ {
+				segmentDisplay[ix][jx] = true
+			}
+			segmentDisplay[ix][4] = false
+		}
+	}
+}
+
+func showControls() string {
+	out := ""
+	return out
+}
+
 func showConfig(m model) string {
 	nSessions := m.config.session
 	workDur, breakDur := m.config.workDuration, m.config.breakDuration
 
-	// Spaces determined, do not alter!
 	config := fmt.Sprintf(
 		"│   Sessions: %d%s│\n│   Work/Break time: %d/%d mins%s│",
 		nSessions, 
@@ -27,6 +93,51 @@ func showConfig(m model) string {
 	return config
 }
 
+func showTimer(m model) string {
+	timeLeft := strconv.Itoa(int(msToSecond(m.config.end - time.Now().UnixMilli())))
+	updateSegmentDisplay(timeLeft)
+
+	var out string
+	for ix := 0; ix < 7; ix++ {
+		var temp []string = []string{}
+		if ix % 3 == 0 {
+			for digit := 0; digit < 4; digit++ {
+				if(segmentDisplay[0][ix] == true) {
+					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat("0", 6)))
+				} else {
+					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat("-", 6)))
+				}
+			}
+			out += "│  " + strings.Join(temp, "   ") + "  │\n"
+		} else {
+			for digit := 0; digit < 4; digit++ {
+				left, right := "-", "-"
+				if(segmentDisplay[digit][ix] == true) { left = "0" }
+				if(segmentDisplay[digit][ix + 1] == true) { right = "0" }
+				temp = append(temp, fmt.Sprintf("%s%s%s", left, strings.Repeat(" ", 6), right))
+			}
+
+			for row := 0; row < 3; row++ {
+				out += "│  " + strings.Join(temp, "   ") + "  │\n"
+			}
+
+			ix++
+		}
+	}
+	return out
+}
+
+/*
+  000000
+ 0      0
+ 0      0
+ 0      0
+  000000
+ 0      0
+ 0      0
+ 0      0
+  000000
+*/
 func viewMainMenu(m model) string {
 	var out []string
 	for k, v := range(m.submenu) {
@@ -48,8 +159,8 @@ func viewMainMenu(m model) string {
 }
 
 func viewBegin(m model) string {
-	out := "│"
-
+	out := showTimer(m)
+	out += "│"
 	for k, v := range([]string{"", "That's a Wrap..."}) {
 		if k == 0 {
 			if m.status.onPause {
@@ -102,9 +213,4 @@ func viewSetSession(m model) string {
 		}
 	}
 	return out + "     │"
-}
-
-func showControls() string {
-	out := ""
-	return out
 }
