@@ -90,7 +90,7 @@ func (m model) View() string {
 	// Show config
 	if m.state == MAIN_MENU {
 		out = append(out, showConfig(m))
-		out = append(out, "───────────────────────────────────────────────")
+		out = append(out, "├─────────────────────────────────────────────┤")
 	}
 
 	switch m.state {
