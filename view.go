@@ -127,17 +127,6 @@ func showTimer(m model) string {
 	return out
 }
 
-/*
-  000000
- 0      0
- 0      0
- 0      0
-  000000
- 0      0
- 0      0
- 0      0
-  000000
-*/
 func viewMainMenu(m model) string {
 	var out []string
 	for k, v := range(m.submenu) {
@@ -160,7 +149,12 @@ func viewMainMenu(m model) string {
 
 func viewBegin(m model) string {
 	out := showTimer(m)
-	out += "│"
+	out += "│        Minutes               Seconds        │\n"
+	if m.status.onPause {
+		out += "│                    Pause                    │\n│"
+	} else {
+		out += "│                  Running..                  │\n│"
+	}
 	for k, v := range([]string{"", "That's a Wrap..."}) {
 		if k == 0 {
 			if m.status.onPause {
