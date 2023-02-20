@@ -37,6 +37,10 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { 
+	if m.config.end - time.Now().UnixMilli() < 0 {
+		m.state = MAIN_MENU
+	}
+
 	switch msg.(type) {
 	case tea.KeyMsg:
 		switch msg.(tea.KeyMsg).String() {
@@ -75,19 +79,6 @@ func (m model) View() string {
 		"╭───────────────── Go-modoro ─────────────────╮",
 	}
 
-	/*
-	 000000   000000      000000   000000 
-	0      0 0      0    0      0 0      0
-	0      0 0      0    0      0 0      0
-	0      0 0      0    0      0 0      0
-	 000000   000000  00  000000   000000 
-	0      0 0      0    0      0 0      0
-	0      0 0      0    0      0 0      0
-    0      0 0      0    0      0 0      0
-	 000000   000000      000000   000000 
-	*/
-
-	// Show config
 	if m.state == MAIN_MENU {
 		out = append(out, showConfig(m))
 		out = append(out, "├─────────────────────────────────────────────┤")
@@ -120,6 +111,6 @@ func (m *model) navigateMenu(dir string) {
 func (m *model) selectMenu() {
 	m.state = m.cursor
 	if m.state == BEGIN {
-		m.config.end = time.Now().UnixMilli() + int64(m.config.workDuration * 1000)
+		m.config.end = time.Now().UnixMilli() + int64(m.config.workDuration * 1000 * 60)
 	}
 }

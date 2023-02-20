@@ -19,56 +19,82 @@ func msToSecond(ms int64) int64 {
 	return ms/1000
 }
 
-func updateSegmentDisplay(timeLeft string) {
-	for ix, v := range(timeLeft) {
+func updateSegmentDisplay(timeLeft int) {
+	timeStr := strconv.Itoa(timeLeft / 60)
+	if len(timeStr) == 1 {
+		timeStr = "0" + timeStr
+	}
+
+	timeStr += strconv.Itoa(timeLeft % 60)
+	if len(timeStr) == 3 {
+		timeStr = timeStr[:2] + "0" + string(timeStr[2])
+	}
+
+	for ix, v := range(timeStr) {
 		for jx := 0; jx < 7; jx++ {
 			segmentDisplay[ix][jx] = false
 		}
+
 		switch v {
-		case 1:
+		case '1':
 			segmentDisplay[ix][2] = true
 			segmentDisplay[ix][5] = true
-		case 2:
+		case '2':
 			segmentDisplay[ix][0] = true
 			segmentDisplay[ix][2] = true
 			segmentDisplay[ix][3] = true
 			segmentDisplay[ix][4] = true
 			segmentDisplay[ix][6] = true
-		case 3:
+		case '3':
 			segmentDisplay[ix][0] = true
 			segmentDisplay[ix][2] = true
 			segmentDisplay[ix][3] = true
 			segmentDisplay[ix][5] = true
 			segmentDisplay[ix][6] = true
-		case 4:
+		case '4':
 			segmentDisplay[ix][1] = true
 			segmentDisplay[ix][2] = true
 			segmentDisplay[ix][3] = true
 			segmentDisplay[ix][5] = true
-		case 5:
+		case '5':
 			segmentDisplay[ix][0] = true
 			segmentDisplay[ix][1] = true
 			segmentDisplay[ix][3] = true
 			segmentDisplay[ix][5] = true
 			segmentDisplay[ix][6] = true
-		case 6:
-			for jx := 0; jx < 8; jx++ {
-				segmentDisplay[ix][jx] = true
-			}
-			segmentDisplay[ix][2] = true
-		case 7:
+		case '6':
+			segmentDisplay[ix][0] = true
+			segmentDisplay[ix][1] = true
+			segmentDisplay[ix][3] = true
+			segmentDisplay[ix][4] = true
+			segmentDisplay[ix][5] = true
+			segmentDisplay[ix][6] = true
+		case '7':
 			segmentDisplay[ix][0] = true
 			segmentDisplay[ix][2] = true
 			segmentDisplay[ix][5] = true
-		case 8:
-			for jx := 0; jx < 8; jx++ {
-				segmentDisplay[ix][jx] = true
-			}
-		case 9:
-			for jx := 0; jx < 8; jx++ {
-				segmentDisplay[ix][jx] = true
-			}
-			segmentDisplay[ix][4] = false
+		case '8':
+			segmentDisplay[ix][0] = true
+			segmentDisplay[ix][1] = true
+			segmentDisplay[ix][2] = true
+			segmentDisplay[ix][3] = true
+			segmentDisplay[ix][4] = true
+			segmentDisplay[ix][5] = true
+			segmentDisplay[ix][6] = true
+		case '9':
+			segmentDisplay[ix][0] = true
+			segmentDisplay[ix][1] = true
+			segmentDisplay[ix][2] = true
+			segmentDisplay[ix][3] = true
+			segmentDisplay[ix][5] = true
+			segmentDisplay[ix][6] = true
+		case '0':
+			segmentDisplay[ix][0] = true
+			segmentDisplay[ix][1] = true
+			segmentDisplay[ix][2] = true
+			segmentDisplay[ix][4] = true
+			segmentDisplay[ix][5] = true
+			segmentDisplay[ix][6] = true
 		}
 	}
 }
@@ -94,7 +120,7 @@ func showConfig(m model) string {
 }
 
 func showTimer(m model) string {
-	timeLeft := strconv.Itoa(int(msToSecond(m.config.end - time.Now().UnixMilli())))
+	timeLeft := int(msToSecond(m.config.end - time.Now().UnixMilli()))
 	updateSegmentDisplay(timeLeft)
 
 	var out string
@@ -102,16 +128,16 @@ func showTimer(m model) string {
 		var temp []string = []string{}
 		if ix % 3 == 0 {
 			for digit := 0; digit < 4; digit++ {
-				if(segmentDisplay[0][ix] == true) {
+				if(segmentDisplay[digit][ix] == true) {
 					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat("0", 6)))
 				} else {
-					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat("-", 6)))
+					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat(".", 6)))
 				}
 			}
 			out += "│  " + strings.Join(temp, "   ") + "  │\n"
 		} else {
 			for digit := 0; digit < 4; digit++ {
-				left, right := "-", "-"
+				left, right := ".", "."
 				if(segmentDisplay[digit][ix] == true) { left = "0" }
 				if(segmentDisplay[digit][ix + 1] == true) { right = "0" }
 				temp = append(temp, fmt.Sprintf("%s%s%s", left, strings.Repeat(" ", 6), right))
