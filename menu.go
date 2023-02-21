@@ -23,7 +23,8 @@ type model struct {
 		workDuration int
 		breakDuration int
 	}
-	status struct {
+	tracker struct {
+		sessionDone int
 		onBreak bool
 		onPause bool
 	}
@@ -34,10 +35,14 @@ type model struct {
 }
 
 func (m model) Init() tea.Cmd { 
-	return nil
+	return tick()
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { 
+	if m.state == EXIT {
+		return m, tea.Quit
+	}
+
 	if m.config.end - time.Now().UnixMilli() < 0 {
 		m.state = MAIN_MENU
 	}
@@ -63,14 +68,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.navigateSubmenu(dir)
 			}
 		case "X":
-			return m, tea.Quit
+			m.config.workDuration = 5
 		}
 	case tickMsg:
+		return m, tick()
 	}
 
-	if m.state == EXIT {
-		return m, tea.Quit
-	}
 	return m, nil
 }
 
@@ -97,6 +100,7 @@ func (m model) View() string {
 			out = append(out, viewBegin(m))
 	}
 	out = append(out, "╰─────────────────────────────────────────────╯")
+	out = append(out, showControls())
 	return strings.Join(out, "\n")
 }
 

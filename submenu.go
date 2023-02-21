@@ -12,7 +12,6 @@ type submenu struct {
 	opts []opt
 }
 
-type tickMsg struct{}
 
 func (m *model) navigateSubmenu(dir string) {
 	switch dir {
@@ -31,8 +30,8 @@ func (m *model) selectSubmenu() {
 	case BEGIN:
 		switch selected {
 		case 0: 
-			m.status.onPause = !(m.status.onPause)
-			if(m.status.onPause) {
+			m.tracker.onPause = !(m.tracker.onPause)
+			if(m.tracker.onPause) {
 				m.pauseStart = time.Now().UnixMilli()
 			} else {
 				m.config.end += time.Now().UnixMilli() - m.pauseStart

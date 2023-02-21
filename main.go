@@ -19,10 +19,12 @@ func main() {
 				workDuration: 15,
 				breakDuration: 5,
 			}, 
-			status: struct {
+			tracker: struct {
+				sessionDone int
 				onBreak bool
 				onPause bool
 			}{
+				sessionDone: 0,
 				onBreak: false,
 				onPause: false,
 			},

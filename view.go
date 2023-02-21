@@ -3,105 +3,19 @@ package main
 import (
 	"fmt"
 	"time"
-	"strconv"
 	"strings"
 )
 
 var segmentDisplay = [4][7]bool{}
 
-func getDigits(n int) int {
-	digs := 0
-	for; n > 0; n /= 10 { digs++ }
-	return digs
-}
-
-func msToSecond(ms int64) int64 {
-	return ms/1000
-}
-
-func updateSegmentDisplay(timeLeft int) {
-	timeStr := strconv.Itoa(timeLeft / 60)
-	if len(timeStr) == 1 {
-		timeStr = "0" + timeStr
-	}
-
-	timeStr += strconv.Itoa(timeLeft % 60)
-	if len(timeStr) == 3 {
-		timeStr = timeStr[:2] + "0" + string(timeStr[2])
-	}
-
-	for ix, v := range(timeStr) {
-		for jx := 0; jx < 7; jx++ {
-			segmentDisplay[ix][jx] = false
-		}
-
-		switch v {
-		case '1':
-			segmentDisplay[ix][2] = true
-			segmentDisplay[ix][5] = true
-		case '2':
-			segmentDisplay[ix][0] = true
-			segmentDisplay[ix][2] = true
-			segmentDisplay[ix][3] = true
-			segmentDisplay[ix][4] = true
-			segmentDisplay[ix][6] = true
-		case '3':
-			segmentDisplay[ix][0] = true
-			segmentDisplay[ix][2] = true
-			segmentDisplay[ix][3] = true
-			segmentDisplay[ix][5] = true
-			segmentDisplay[ix][6] = true
-		case '4':
-			segmentDisplay[ix][1] = true
-			segmentDisplay[ix][2] = true
-			segmentDisplay[ix][3] = true
-			segmentDisplay[ix][5] = true
-		case '5':
-			segmentDisplay[ix][0] = true
-			segmentDisplay[ix][1] = true
-			segmentDisplay[ix][3] = true
-			segmentDisplay[ix][5] = true
-			segmentDisplay[ix][6] = true
-		case '6':
-			segmentDisplay[ix][0] = true
-			segmentDisplay[ix][1] = true
-			segmentDisplay[ix][3] = true
-			segmentDisplay[ix][4] = true
-			segmentDisplay[ix][5] = true
-			segmentDisplay[ix][6] = true
-		case '7':
-			segmentDisplay[ix][0] = true
-			segmentDisplay[ix][2] = true
-			segmentDisplay[ix][5] = true
-		case '8':
-			segmentDisplay[ix][0] = true
-			segmentDisplay[ix][1] = true
-			segmentDisplay[ix][2] = true
-			segmentDisplay[ix][3] = true
-			segmentDisplay[ix][4] = true
-			segmentDisplay[ix][5] = true
-			segmentDisplay[ix][6] = true
-		case '9':
-			segmentDisplay[ix][0] = true
-			segmentDisplay[ix][1] = true
-			segmentDisplay[ix][2] = true
-			segmentDisplay[ix][3] = true
-			segmentDisplay[ix][5] = true
-			segmentDisplay[ix][6] = true
-		case '0':
-			segmentDisplay[ix][0] = true
-			segmentDisplay[ix][1] = true
-			segmentDisplay[ix][2] = true
-			segmentDisplay[ix][4] = true
-			segmentDisplay[ix][5] = true
-			segmentDisplay[ix][6] = true
-		}
-	}
-}
-
 func showControls() string {
-	out := ""
-	return out
+	out := []string{"                   Controls                   "}
+
+	for _, v := range([]string{"^/k - up               v/j - down", "</h - left             >/l - right"}) {
+		out = append(out, v)
+	}
+
+	return strings.Join(out, "\n      ")
 }
 
 func showConfig(m model) string {
@@ -121,7 +35,7 @@ func showConfig(m model) string {
 
 func showTimer(m model) string {
 	timeLeft := int(msToSecond(m.config.end - time.Now().UnixMilli()))
-	if !(m.status.onPause) {
+	if !(m.tracker.onPause) {
 		updateSegmentDisplay(timeLeft)
 	}
 
@@ -178,14 +92,14 @@ func viewMainMenu(m model) string {
 func viewBegin(m model) string {
 	out := showTimer(m)
 	out += "│        Minutes               Seconds        │\n"
-	if m.status.onPause {
+	if m.tracker.onPause {
 		out += "│                    Pause                    │\n│"
 	} else {
 		out += "│                  Running..                  │\n│"
 	}
 	for k, v := range([]string{"", "That's a Wrap..."}) {
 		if k == 0 {
-			if m.status.onPause {
+			if m.tracker.onPause {
 				v = "Let's Continue!  "
 			} else {
 				v = "Hold on a second!"
