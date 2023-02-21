@@ -43,8 +43,22 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Quit
 	}
 
-	if m.config.end - time.Now().UnixMilli() < 0 {
-		m.state = MAIN_MENU
+	timeNow := time.Now().UnixMilli()
+	if m.config.end - timeNow <= 0 {
+		if m.tracker.onBreak {
+			m.config.end = time.Now().UnixMilli() + int64(m.config.workDuration * 1000 * 60)
+			m.tracker.sessionDone++
+		} else {
+			m.config.end = time.Now().UnixMilli() + int64(m.config.breakDuration * 1000 * 60)
+		}
+
+		if m.tracker.sessionDone == m.config.session {
+			m.state = MAIN_MENU
+		}
+		
+		if m.state == BEGIN {
+			m.tracker.onBreak = !(m.tracker.onBreak)
+		}
 	}
 
 	switch msg.(type) {
@@ -68,7 +82,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.navigateSubmenu(dir)
 			}
 		case "X":
-			m.config.workDuration = 5
+			m.config.workDuration = 1
 		}
 	case tickMsg:
 		return m, tick()
@@ -115,6 +129,7 @@ func (m *model) navigateMenu(dir string) {
 func (m *model) selectMenu() {
 	m.state = m.cursor
 	if m.state == BEGIN {
+		m.tracker.sessionDone = 0
 		m.config.end = time.Now().UnixMilli() + int64(m.config.workDuration * 1000 * 60)
 	}
 }

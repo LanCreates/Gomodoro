@@ -15,7 +15,7 @@ func main() {
 				breakDuration int
 			}{
 				end: 0,
-				session: 1,
+				session: 2,
 				workDuration: 15,
 				breakDuration: 5,
 			}, 
