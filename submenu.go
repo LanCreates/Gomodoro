@@ -49,7 +49,7 @@ func (m *model) selectSubmenu() {
 		if selected == 3 {
 			m.config.session = 6969
 		} else {
-			m.config.session = 6 + (selected*2)
+			m.config.session = (selected + 1)*8
 		}
 		m.state = MAIN_MENU
 	}
