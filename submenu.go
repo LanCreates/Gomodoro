@@ -1,5 +1,7 @@
 package main
 
+import "time"
+
 type opt struct {
 	text string
 }
@@ -28,8 +30,15 @@ func (m *model) selectSubmenu() {
 	switch m.state {
 	case BEGIN:
 		switch selected {
-		case 0: m.status.onPause = !(m.status.onPause)
-		case 1: m.state = MAIN_MENU
+		case 0: 
+			m.status.onPause = !(m.status.onPause)
+			if(m.status.onPause) {
+				m.pauseStart = time.Now().UnixMilli()
+			} else {
+				m.config.end += time.Now().UnixMilli() - m.pauseStart
+			}
+		case 1: 
+			m.state = MAIN_MENU
 		}
 	case SET_DUR_WORK:
 		m.config.workDuration = (selected + 1)*15

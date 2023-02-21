@@ -121,7 +121,9 @@ func showConfig(m model) string {
 
 func showTimer(m model) string {
 	timeLeft := int(msToSecond(m.config.end - time.Now().UnixMilli()))
-	updateSegmentDisplay(timeLeft)
+	if !(m.status.onPause) {
+		updateSegmentDisplay(timeLeft)
+	}
 
 	var out string
 	for ix := 0; ix < 7; ix++ {

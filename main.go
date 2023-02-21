@@ -26,6 +26,7 @@ func main() {
 				onBreak: false,
 				onPause: false,
 			},
+			pauseStart: 0,
 			state: MAIN_MENU, 
 			submenu: []submenu{ 
 				{ 

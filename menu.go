@@ -27,6 +27,7 @@ type model struct {
 		onBreak bool
 		onPause bool
 	}
+	pauseStart int64
 	state int
 	cursor int
 	submenu []submenu
@@ -65,7 +66,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case tickMsg:
-		
 	}
 
 	if m.state == EXIT {
