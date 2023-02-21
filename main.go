@@ -59,9 +59,9 @@ func main() {
 				{
 					name: "Set session",
 					opts: []opt {
-						{text: "2"},
-						{text: "3"},
-						{text: "4"},
+						{text: "6"},
+						{text: "8"},
+						{text: "10"},
 						{text: "until tired"},
 						},
 					},

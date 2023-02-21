@@ -148,5 +148,5 @@ func viewSetSession(m model) string {
 			out += fmt.Sprintf("   %s %s", nonactiveSelection(), v.text)
 		}
 	}
-	return out + "     │"
+	return out + "    │"
 }
