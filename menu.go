@@ -27,8 +27,8 @@ type model struct {
 		sessionDone int
 		onBreak bool
 		onPause bool
+		pauseStart int64
 	}
-	pauseStart int64
 	state int
 	cursor int
 	submenu []submenu

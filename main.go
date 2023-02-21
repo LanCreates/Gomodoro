@@ -23,12 +23,13 @@ func main() {
 				sessionDone int
 				onBreak bool
 				onPause bool
+				pauseStart int64
 			}{
 				sessionDone: 0,
 				onBreak: false,
 				onPause: false,
+				pauseStart: 0,
 			},
-			pauseStart: 0,
 			state: MAIN_MENU, 
 			submenu: []submenu{ 
 				{ 

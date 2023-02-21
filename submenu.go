@@ -32,9 +32,9 @@ func (m *model) selectSubmenu() {
 		case 0: 
 			m.tracker.onPause = !(m.tracker.onPause)
 			if(m.tracker.onPause) {
-				m.pauseStart = time.Now().UnixMilli()
+				m.tracker.pauseStart = time.Now().UnixMilli()
 			} else {
-				m.config.end += time.Now().UnixMilli() - m.pauseStart
+				m.config.end += time.Now().UnixMilli() - m.tracker.pauseStart
 			}
 		case 1: 
 			m.state = MAIN_MENU
