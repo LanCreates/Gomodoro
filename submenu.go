@@ -37,6 +37,7 @@ func (m *model) selectSubmenu() {
 				m.config.end += time.Now().UnixMilli() - m.tracker.pauseStart
 			}
 		case 1: 
+			m.tracker.onPause = false
 			m.state = MAIN_MENU
 		}
 	case SET_DUR_WORK:
