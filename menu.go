@@ -38,6 +38,7 @@ func (m model) Init() tea.Cmd {
 	return tick()
 }
 
+// This handles state
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { 
 	if m.state == EXIT {
 		return m, tea.Quit
@@ -50,6 +51,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.tracker.sessionDone++
 		} else {
 			m.config.end = time.Now().UnixMilli() + int64(m.config.breakDuration * 1000 * 60)
+			if m.tracker.sessionDone % 4 == 3 {
+				m.config.end *= 3
+			}
 		}
 
 		if m.tracker.sessionDone == m.config.session {
@@ -82,7 +86,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.navigateSubmenu(dir)
 			}
 		case "X":
-			m.config.workDuration = 1
+			m.config.breakDuration = 1
+			m.config.workDuration = 2
 		}
 	case tickMsg:
 		return m, tick()
