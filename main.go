@@ -15,8 +15,8 @@ func main() {
 				breakDuration int
 			}{
 				end: 0,
-				session: 2,
-				workDuration: 15,
+				session: 8,
+				workDuration: 25,
 				breakDuration: 5,
 			}, 
 			tracker: struct {
@@ -42,10 +42,10 @@ func main() {
 				{
 					name: "Set work duration",
 					opts: []opt {
-						{text: "15"},
-						{text: "30"},
+						{text: "25"},
+						{text: "35"},
 						{text: "45"},
-						{text: "60"},
+						{text: "55"},
 					},
 				},
 				{

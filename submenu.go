@@ -40,7 +40,7 @@ func (m *model) selectSubmenu() {
 			m.state = MAIN_MENU
 		}
 	case SET_DUR_WORK:
-		m.config.workDuration = (selected + 1)*15
+		m.config.workDuration = 25 + selected*10
 		m.state = MAIN_MENU
 	case SET_DUR_BREAK:
 		m.config.breakDuration = (selected + 1)*5
