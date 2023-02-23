@@ -51,7 +51,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.tracker.sessionDone++
 		} else {
 			m.config.end = time.Now().UnixMilli() + int64(m.config.breakDuration * 1000 * 60)
-			if m.tracker.sessionDone % 4 == 3 {
+			if m.tracker.sessionDone % 3 == 2 {
 				m.config.end *= 3
 			}
 		}
