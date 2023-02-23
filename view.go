@@ -9,10 +9,10 @@ import (
 var segmentDisplay = [4][7]bool{}
 
 func showControls() string {
-	out := []string{"                   Controls                   "}
+	out := []string{dimText("                   Controls                   ")}
 
 	for _, v := range([]string{"^/k - up               v/j - down", "</h - left             >/l - right"}) {
-		out = append(out, v)
+		out = append(out, dimText(v))
 	}
 
 	return strings.Join(out, "\n      ")
@@ -25,10 +25,10 @@ func showConfig(m model) string {
 	config := fmt.Sprintf(
 		"│   Sessions: %d%s│\n│   Work/Break time: %d/%d mins%s│",
 		nSessions, 
-		strings.Repeat(" ", 45 - (13 + getDigits(nSessions))),
+		strings.Repeat(" ", 45 - (12 + getDigits(nSessions))),
 		workDur, 
 		breakDur, 
-		strings.Repeat(" ", 45 - (20 + getDigits(workDur) + getDigits(breakDur) + 6)),
+		strings.Repeat(" ", 45 - (18 + getDigits(workDur) + getDigits(breakDur) + 6)),
 	)
 	return config
 }
@@ -45,17 +45,17 @@ func showTimer(m model) string {
 		if ix % 3 == 0 {
 			for digit := 0; digit < 4; digit++ {
 				if(segmentDisplay[digit][ix] == true) {
-					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat("0", 6)))
+					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat("8", 6)))
 				} else {
-					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat(".", 6)))
+					temp = append(temp, fmt.Sprintf(" %s ", strings.Repeat(dimText("."), 6)))
 				}
 			}
 			out += "│  " + strings.Join(temp, "   ") + "  │\n"
 		} else {
 			for digit := 0; digit < 4; digit++ {
-				left, right := ".", "."
-				if(segmentDisplay[digit][ix] == true) { left = "0" }
-				if(segmentDisplay[digit][ix + 1] == true) { right = "0" }
+				left, right := dimText("."), dimText(".")
+				if(segmentDisplay[digit][ix] == true) { left = "8" }
+				if(segmentDisplay[digit][ix + 1] == true) { right = "8" }
 				temp = append(temp, fmt.Sprintf("%s%s%s", left, strings.Repeat(" ", 6), right))
 			}
 
@@ -81,7 +81,7 @@ func viewMainMenu(m model) string {
 		} else {
 			out = append(out, 
 				fmt.Sprintf( "│   %s%s│", 
-					v.name, strings.Repeat(" ", 45 - (3 + len(v.name))),
+					dimText(v.name), strings.Repeat(" ", 45 - (3 + len(v.name))),
 				),
 			)
 		}
@@ -92,11 +92,32 @@ func viewMainMenu(m model) string {
 func viewBegin(m model) string {
 	out := showTimer(m)
 	out += "│        Minutes               Seconds        │\n"
-	if m.tracker.onPause {
-		out += "│                    Pause                    │\n│"
+	out += "├─────────────────────────────────────────────┤\n"
+
+	if m.tracker.onBreak {
+		if m.tracker.sessionDone % 4 == 3 {
+			out += "│ Longer Break...   "
+		} else {
+			out += "│ Break...          "
+		}
 	} else {
-		out += "│                  Running..                  │\n│"
+		out += "│ Working...        "
 	}
+
+	if m.tracker.onPause {
+		out += "                    Pause │\n"
+	} else {
+		out += "                  Running │\n"
+	}
+
+	out += fmt.Sprintf("│ Session %d/%d%s│\n", 
+		m.tracker.sessionDone, m.config.session,
+		strings.Repeat(" ", 
+			45 - (9 + getDigits(m.tracker.sessionDone) + getDigits(m.config.session)),
+		),
+	)
+
+	out += "├─────────────────────────────────────────────┤\n"
 	for k, v := range([]string{"", "That's a Wrap..."}) {
 		if k == 0 {
 			if m.tracker.onPause {
@@ -107,21 +128,27 @@ func viewBegin(m model) string {
 		}
 
 		if(k == m.submenu[m.cursor].cursor) {
-			out += fmt.Sprintf("  %s %s", activeSelection(), v)
+			out += fmt.Sprintf("│ > %s%s│", 
+				v, strings.Repeat(" ", 45 - (3 + len(v))),
+			)
 		} else {
-			out += fmt.Sprintf("  %s %s", nonactiveSelection(), v)
+			out += fmt.Sprintf("│  %s%s│", 
+				dimText(v), strings.Repeat(" ", 45 - (2 + len(v))),
+			)
 		}
+		
+		if k == 0 {out += "\n"}
 	}
-	return out + "  │"
+	return out
 }
 
 func viewSetDurWork(m model) string {
 	out := "│  How long do you want to work? (in minute)  │\n│    "
 	for k, v := range(m.submenu[m.cursor].opts) {
 		if k == m.submenu[m.cursor].cursor {
-			out += fmt.Sprintf("   %s %s", activeSelection(), v.text)
+			out += fmt.Sprintf("   %s %s", activeBlock(2), v.text)
 		} else {
-			out += fmt.Sprintf("   %s %s", nonactiveSelection(), v.text)
+			out += fmt.Sprintf("   %s %s", dimBlock(2), dimText(v.text))
 		}
 	}
 	return out + "         │"
@@ -131,9 +158,9 @@ func viewSetDurBreak(m model) string {
 	out := "│  How long do you want to rest? (in minute)  │\n│          "
 	for k, v := range(m.submenu[m.cursor].opts) {
 		if k == m.submenu[m.cursor].cursor {
-			out += fmt.Sprintf("   %s %s", activeSelection(), v.text)
+			out += fmt.Sprintf("   %s %s", activeBlock(2), v.text)
 		} else {
-			out += fmt.Sprintf("   %s %s", nonactiveSelection(), v.text)
+			out += fmt.Sprintf("   %s %s", dimBlock(2), dimText(v.text))
 		}
 	}
 	return out + "            │"
@@ -143,9 +170,9 @@ func viewSetSession(m model) string {
 	out := "│        How many rounds do you want?         │\n│  "
 	for k, v := range(m.submenu[m.cursor].opts) {
 		if k == m.submenu[m.cursor].cursor {
-			out += fmt.Sprintf("   %s %s", activeSelection(), v.text)
+			out += fmt.Sprintf("   %s %s", activeBlock(2), v.text)
 		} else {
-			out += fmt.Sprintf("   %s %s", nonactiveSelection(), v.text)
+			out += fmt.Sprintf("   %s %s", dimBlock(2), dimText(v.text))
 		}
 	}
 	return out + "   │"

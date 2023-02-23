@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	gloss "github.com/charmbracelet/lipgloss"
 )
 
@@ -24,21 +25,33 @@ func makeColor(r, g, b int64) string {
 }
 
 var (
-	ACTIVE_BLOCK = gloss.NewStyle().
-		Background(gloss.Color("#FFFFFF"))
-	NONACTIVE_BLOCK = gloss.NewStyle().
-		Background(gloss.Color("#888888"))
+	BLOCK_ACTIVE = gloss.NewStyle().
+		Background(gloss.Color("#FAA834"))
+	BLOCK_BRIGHT = gloss.NewStyle().
+		Background(gloss.Color("#EEEEEE"))
+	BLOCK_DIM = gloss.NewStyle().
+		Background(gloss.Color("#666666"))
+	TXT_DIM = gloss.NewStyle().
+		Foreground(gloss.Color("#888888"))
+	TXT_ONSELECT = gloss.NewStyle().
+		Foreground(gloss.Color("#FAA834"))
 )
 
 
-func activeSelection() string {
+func activeBlock(l int) string {
 	return fmt.Sprintf("%s",
-		ACTIVE_BLOCK.Render("  "),
+		BLOCK_ACTIVE.Render(strings.Repeat(" ", l)),
 	)
 }
 
-func nonactiveSelection() string {
+func dimBlock(l int) string {
 	return fmt.Sprintf("%s",
-		NONACTIVE_BLOCK.Render("  "),
+		BLOCK_DIM.Render(strings.Repeat(" ", l)),
+	)
+}
+
+func dimText(s string) string {
+	return fmt.Sprintf("%s",
+		TXT_DIM.Render(s),
 	)
 }

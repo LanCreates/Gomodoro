@@ -18,7 +18,7 @@ func tick() tea.Cmd {
 }
 
 func getDigits(n int) int {
-	digs := 0
+	digs := 1
 	for; n > 0; n /= 10 { digs++ }
 	return digs
 }
