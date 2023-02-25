@@ -46,22 +46,28 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	timeNow := time.Now().UnixMilli()
 	if m.config.end - timeNow <= 0 {
-		if m.tracker.onBreak {
-			m.config.end = time.Now().UnixMilli() + int64(m.config.workDuration * 1000 * 60)
-			m.tracker.sessionDone++
-		} else {
-			m.config.end = time.Now().UnixMilli() + int64(m.config.breakDuration * 1000 * 60)
-			if m.tracker.sessionDone % 4 == 3 {
-				m.config.end *= 3
+		if m.state == BEGIN {
+			if m.tracker.onBreak {
+				notifyWork()
+				m.config.end = time.Now().UnixMilli() + int64(m.config.workDuration * 1000 * 60)
+				m.tracker.sessionDone++
+			} else {
+				if m.tracker.sessionDone % 4 == 3 {
+					notifyLongBreak()
+					m.config.end = 3
+				} else {
+					notifyBreak()
+					m.config.end = 1
+				}
+
+				m.config.end *= time.Now().UnixMilli() + int64(m.config.breakDuration * 1000 * 60)
 			}
+
+			m.tracker.onBreak = !(m.tracker.onBreak)
 		}
 
 		if m.tracker.sessionDone == m.config.session {
 			m.state = MAIN_MENU
-		}
-		
-		if m.state == BEGIN {
-			m.tracker.onBreak = !(m.tracker.onBreak)
 		}
 	}
 
