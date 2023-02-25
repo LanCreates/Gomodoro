@@ -16,8 +16,13 @@ A simple CLI pomodoro timer made with Go
 soon...
 
 ## ❓ User Guide
-### ⌨ Controls
-### 📢 Notice
+### Controls
+- up arrow / k -> next menu
+- right arrow / l -> next menu
+- down arrow / k -> previous menu
+- left arrow / l -> previous menu
+
+### Notice
 On transition between session (indicated by music playing), program will not respond to any user's input. Note that it's not a bug
 
 ## 📈 Feedback
