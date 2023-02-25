@@ -25,10 +25,10 @@ func showConfig(m model) string {
 	config := fmt.Sprintf(
 		"│   Sessions: %d%s│\n│   Work/Break time: %d/%d mins%s│",
 		nSessions, 
-		strings.Repeat(" ", 45 - (12 + getDigits(nSessions))),
+		strings.Repeat(" ", 45 - (13 + getDigits(nSessions))),
 		workDur, 
 		breakDur, 
-		strings.Repeat(" ", 45 - (18 + getDigits(workDur) + getDigits(breakDur) + 6)),
+		strings.Repeat(" ", 45 - (20 + getDigits(workDur) + getDigits(breakDur) + 6)),
 	)
 	return config
 }
@@ -111,9 +111,9 @@ func viewBegin(m model) string {
 	}
 
 	out += fmt.Sprintf("│ Session %d/%d%s│\n", 
-		m.tracker.sessionDone, m.config.session,
+		m.tracker.sessionDone + 1, m.config.session,
 		strings.Repeat(" ", 
-			45 - (9 + getDigits(m.tracker.sessionDone) + getDigits(m.config.session)),
+			45 - (10 + getDigits(m.tracker.sessionDone + 1) + getDigits(m.config.session)),
 		),
 	)
 
