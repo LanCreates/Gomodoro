@@ -1,6 +1,9 @@
 package main
 
-import "strconv"
+import (
+	"strconv"
+	"fmt"
+)
 
 func updateSegmentDisplay(timeLeft int) {
 	timeStr := strconv.Itoa(timeLeft / 60)

@@ -52,15 +52,15 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.config.end = time.Now().UnixMilli() + int64(m.config.workDuration * 1000 * 60)
 				m.tracker.sessionDone++
 			} else {
+				m.config.end = int64(m.config.breakDuration * 1000 * 60)
 				if m.tracker.sessionDone % 4 == 3 {
 					notifyLongBreak()
-					m.config.end = 3
+					m.config.end *= 3
 				} else {
 					notifyBreak()
-					m.config.end = 1
 				}
+				m.config.end += time.Now().UnixMilli()
 
-				m.config.end *= time.Now().UnixMilli() + int64(m.config.breakDuration * 1000 * 60)
 			}
 
 			m.tracker.onBreak = !(m.tracker.onBreak)
@@ -92,8 +92,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.navigateSubmenu(dir)
 			}
 		case "X":
-			m.config.breakDuration = 1
-			m.config.workDuration = 2
+			m.config.breakDuration = 0
+			m.config.workDuration = 0
 		}
 	case tickMsg:
 		return m, tick()

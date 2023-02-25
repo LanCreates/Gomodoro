@@ -66,7 +66,7 @@ func showTimer(m model) string {
 			ix++
 		}
 	}
-	return out
+	return out 
 }
 
 func viewMainMenu(m model) string {
