@@ -5,15 +5,23 @@ A simple CLI pomodoro timer made with Go
 - [x] ⌨ Simple controls
 - [x] 🌟 Simplistic interface
 - [x] 🛠Various pomodoro settings (work time, break time, number of pomodoro sessions)
-- [x] 🎵 Be notified whether a section is done with sound!
+- [x] 🎵 Be notified whether a session is done with sound!
 
 ## 📦 Packages used
 - [Bubbletea](https://github.com/charmbracelet/bubbletea)
 - [Lipgloss](https://github.com/charmbracelet/lipgloss)
-- [beep](https://github.com/faiface/beep)
+- [Beep](https://github.com/faiface/beep)
 
 ## ⚙ Installation
-soon...
+- Build it yourself
+```
+git clone https://github.com/lancreate5/Gomodoro
+cd Gomodoro
+go build
+```
+
+- Binary 
+soon
 
 ## ❓ User Guide
 ### Controls
@@ -21,6 +29,8 @@ soon...
 - right arrow / l -> next menu
 - down arrow / k -> previous menu
 - left arrow / l -> previous menu
+- esc -> Go to main menu
+- X -> test mode
 
 ### Notice
 On transition between session (indicated by music playing), program will not respond to any user's input. Note that it's not a bug
