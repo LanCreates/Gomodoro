@@ -70,7 +70,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.state = MAIN_MENU
 			m.tracker.sessionDone = 0
 			m.tracker.onBreak = false
-			m.tracker.onPause = true
+			m.tracker.onPause = false
 		}
 	}
 
