@@ -68,6 +68,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		if m.tracker.sessionDone == m.config.session {
 			m.state = MAIN_MENU
+			m.tracker.sessionDone = 0
+			m.tracker.onBreak = false
+			m.tracker.onPause = true
 		}
 	}
 
@@ -92,8 +95,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.navigateSubmenu(dir)
 			}
 		case "X":
-			m.config.breakDuration = 0
-			m.config.workDuration = 0
+			m.config.breakDuration = 1
+			m.config.workDuration = 1
+			m.config.session = 4
 		}
 	case tickMsg:
 		return m, tick()
