@@ -2,7 +2,6 @@ package main
 
 import (
 	"strconv"
-	"fmt"
 )
 
 func updateSegmentDisplay(timeLeft int) {
