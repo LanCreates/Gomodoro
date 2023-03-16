@@ -34,7 +34,11 @@ func (m *model) selectSubmenu() {
 			if(m.tracker.onPause) {
 				m.tracker.pauseStart = time.Now().UnixMilli()
 			} else {
-				m.config.end += time.Now().UnixMilli() - m.tracker.pauseStart
+				if(m.config.end < time.Now().UnixMilli() - m.tracker.pauseStart) {
+					m.config.end = time.Now().UnixMilli() + (m.config.end - m.tracker.pauseStart)
+				} else {
+					m.config.end += time.Now().UnixMilli() - m.tracker.pauseStart
+				}
 			}
 		case 1: 
 			m.tracker.onPause = false

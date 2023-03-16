@@ -45,7 +45,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	timeNow := time.Now().UnixMilli()
-	if m.config.end - timeNow <= 0 {
+	if m.config.end - timeNow <= 0 && !(m.tracker.onPause) {
 		if m.state == BEGIN {
 			if m.tracker.onBreak {
 				notifyWork()
